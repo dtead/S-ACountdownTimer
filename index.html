@@ -25,19 +25,19 @@
       align-items: center; 
       gap: 6px;
     }
-    /* Split-Flap Card Styles */
+    /* Static Flip Card Base */
     .flip-card {
       position: relative;
       background: #1e1b2e;
       border: 2px solid rgba(129, 140, 248, 0.4);
       border-radius: 12px;
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      perspective: 300px;
+      perspective: 400px;
       overflow: hidden;
     }
     .flip-card::after {
@@ -58,14 +58,14 @@
       font-variant-numeric: tabular-nums;
       z-index: 1;
     }
-    /* True Top-Flap Flip Animation */
+    /* Smooth, slower top flap folding down */
     .top-flap {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 50%;
-      background: #252238;
+      background: #28243f;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       overflow: hidden;
@@ -82,14 +82,14 @@
       font-size: 2.2rem;
       font-weight: 700;
       color: #f0f0ff;
-      line-height: 70px; /* Aligns vertically with center */
+      line-height: 72px;
     }
     .fold-down {
-      animation: flipTop 0.4s ease-in forwards;
+      animation: flipTop 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
     @keyframes flipTop {
       0% { transform: rotateX(0deg); filter: brightness(1); }
-      100% { transform: rotateX(-90deg); filter: brightness(0.6); }
+      100% { transform: rotateX(-90deg); filter: brightness(0.4); }
     }
     .countdown-label {
       font-size: 0.7rem; 
@@ -156,17 +156,18 @@
         const oldValue = el.textContent;
         el.textContent = newValue;
 
-        // Create temporary folding top flap for realistic split-flap motion
-        const flap = document.createElement('div');
-        flap.className = 'top-flap';
-        const span = document.createElement('span');
-        span.textContent = oldValue;
-        flap.appendChild(span);
-        card.appendChild(flap);
+        if (oldValue !== '--') {
+          const flap = document.createElement('div');
+          flap.className = 'top-flap';
+          const span = document.createElement('span');
+          span.textContent = oldValue;
+          flap.appendChild(span);
+          card.appendChild(flap);
 
-        flap.offsetHeight; // Trigger layout reflow
-        flap.classList.add('fold-down');
-        setTimeout(() => flap.remove(), 400);
+          flap.offsetHeight; 
+          flap.classList.add('fold-down');
+          setTimeout(() => flap.remove(), 600);
+        }
       }
     }
 
@@ -183,7 +184,6 @@
     tick();
     setInterval(tick, 1000);
 
-    // Interactive mouse ripple effect
     const colors = ['#c084fc', '#818cf8', '#a5b4fc', '#ddd6fe'];
     let lastR = 0;
     document.addEventListener('mousemove', e => {
