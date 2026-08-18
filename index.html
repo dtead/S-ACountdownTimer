@@ -168,23 +168,28 @@
 
     function updateValue(id, newValue) {
       const el = document.getElementById(id);
-      if (el.textContent !== newValue) {
+      if (!el) return;
+      const oldValue = el.textContent;
+      
+      if (oldValue === '--') {
+        el.textContent = newValue;
+        return;
+      }
+
+      if (oldValue !== newValue) {
         const card = el.closest('.flip-card');
-        const oldValue = el.textContent;
         el.textContent = newValue;
         
-        if (oldValue !== '--') {
-          const flap = document.createElement('div');
-          flap.className = 'top-flap';
-          const span = document.createElement('span');
-          span.textContent = oldValue;
-          flap.appendChild(span);
-          card.appendChild(flap);
-          
-          flap.offsetHeight; 
-          flap.classList.add('fold-down');
-          setTimeout(() => flap.remove(), 600);
-        }
+        const flap = document.createElement('div');
+        flap.className = 'top-flap';
+        const span = document.createElement('span');
+        span.textContent = oldValue;
+        flap.appendChild(span);
+        card.appendChild(flap);
+        
+        flap.offsetHeight; 
+        flap.classList.add('fold-down');
+        setTimeout(() => flap.remove(), 600);
       }
     }
 
