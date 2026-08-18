@@ -7,17 +7,35 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    body { 
+    /* Force completely transparent background on html and body */
+    html, body { 
       font-family: 'DM Sans', sans-serif; 
-      background: transparent; 
+      background: transparent !important; 
       margin: 0; 
+      padding: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       overflow: hidden;
       mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+    .countdown-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      background: transparent !important;
+    }
+    .event-date {
+      color: #b6c3ff;
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
     }
     .countdown-unit {
       display: flex; 
@@ -97,52 +115,36 @@
       letter-spacing: 0.15em; 
       color: #a5b4fc;
     }
-    .cursor-ripple { 
-      position: fixed; 
-      pointer-events: none; 
-    }
-    .ripple-ring {
-      position: absolute; 
-      width: 60px; 
-      height: 60px; 
-      border: 2px solid;
-      border-radius: 50%; 
-      top: 50%; 
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: ripple-expand 1.5s ease-out forwards;
-    }
-    @keyframes ripple-expand {
-      0% { width: 60px; height: 60px; opacity: 0.8; }
-      100% { width: 180px; height: 180px; opacity: 0; }
-    }
   </style>
 </head>
 <body>
-  <div id="countdown" class="flex gap-3 sm:gap-5">
-    <div class="countdown-unit">
-      <div class="flip-card" id="card-days">
-        <span id="cd-days" class="countdown-value">--</span>
+  <div class="countdown-container">
+    <div class="event-date">Thursday, August 27, 2026 at 7:00pm</div>
+    <div id="countdown" class="flex gap-3 sm:gap-5">
+      <div class="countdown-unit">
+        <div class="flip-card" id="card-days">
+          <span id="cd-days" class="countdown-value">--</span>
+        </div>
+        <span class="countdown-label">Days</span>
       </div>
-      <span class="countdown-label">Days</span>
-    </div>
-    <div class="countdown-unit">
-      <div class="flip-card" id="card-hours">
-        <span id="cd-hours" class="countdown-value">--</span>
+      <div class="countdown-unit">
+        <div class="flip-card" id="card-hours">
+          <span id="cd-hours" class="countdown-value">--</span>
+        </div>
+        <span class="countdown-label">Hours</span>
       </div>
-      <span class="countdown-label">Hours</span>
-    </div>
-    <div class="countdown-unit">
-      <div class="flip-card" id="card-mins">
-        <span id="cd-mins" class="countdown-value">--</span>
+      <div class="countdown-unit">
+        <div class="flip-card" id="card-mins">
+          <span id="cd-mins" class="countdown-value">--</span>
+        </div>
+        <span class="countdown-label">Min</span>
       </div>
-      <span class="countdown-label">Min</span>
-    </div>
-    <div class="countdown-unit">
-      <div class="flip-card" id="card-secs">
-        <span id="cd-secs" class="countdown-value">--</span>
+      <div class="countdown-unit">
+        <div class="flip-card" id="card-secs">
+          <span id="cd-secs" class="countdown-value">--</span>
+        </div>
+        <span class="countdown-label">Sec</span>
       </div>
-      <span class="countdown-label">Sec</span>
     </div>
   </div>
 
@@ -183,24 +185,6 @@
 
     tick();
     setInterval(tick, 1000);
-
-    const colors = ['#c084fc', '#818cf8', '#a5b4fc', '#ddd6fe'];
-    let lastR = 0;
-    document.addEventListener('mousemove', e => {
-      const now = Date.now();
-      if (now - lastR < 80) return;
-      lastR = now;
-      const c = document.createElement('div');
-      c.className = 'cursor-ripple';
-      c.style.left = e.clientX + 'px';
-      c.style.top = e.clientY + 'px';
-      const r = document.createElement('div');
-      r.className = 'ripple-ring';
-      r.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
-      c.appendChild(r);
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 1500);
-    });
   </script>
 </body>
 </html>
