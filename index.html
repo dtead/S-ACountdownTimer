@@ -16,7 +16,6 @@
       justify-content: center;
       min-height: 100vh;
       overflow: hidden;
-      /* Smooth fade on left and right edges */
       mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
     }
@@ -26,8 +25,8 @@
       align-items: center; 
       gap: 6px;
     }
-    /* Flip Clock Box Style */
-    .flip-box {
+    /* Split-Flap Card Styles */
+    .flip-card {
       position: relative;
       background: #1e1b2e;
       border: 2px solid rgba(129, 140, 248, 0.4);
@@ -38,10 +37,10 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      perspective: 200px;
+      perspective: 300px;
+      overflow: hidden;
     }
-    /* Center dividing line for mechanical flip card look */
-    .flip-box::after {
+    .flip-card::after {
       content: '';
       position: absolute;
       top: 50%;
@@ -49,6 +48,7 @@
       right: 0;
       height: 1px;
       background: rgba(129, 140, 248, 0.3);
+      z-index: 10;
     }
     .countdown-value {
       font-size: 2.2rem; 
@@ -56,15 +56,40 @@
       line-height: 1;
       color: #f0f0ff; 
       font-variant-numeric: tabular-nums;
-      transition: transform 0.2s ease-in-out;
+      z-index: 1;
     }
-    .flip-anim {
-      animation: flipCard 0.4s ease-in-out;
+    /* True Top-Flap Flip Animation */
+    .top-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: #252238;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      transform-origin: bottom;
+      backface-visibility: hidden;
+      z-index: 5;
     }
-    @keyframes flipCard {
-      0% { transform: rotateX(0deg); opacity: 0.8; }
-      50% { transform: rotateX(-90deg); opacity: 0.2; }
-      100% { transform: rotateX(0deg); opacity: 1; }
+    .top-flap span {
+      position: absolute;
+      top: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #f0f0ff;
+      line-height: 70px; /* Aligns vertically with center */
+    }
+    .fold-down {
+      animation: flipTop 0.4s ease-in forwards;
+    }
+    @keyframes flipTop {
+      0% { transform: rotateX(0deg); filter: brightness(1); }
+      100% { transform: rotateX(-90deg); filter: brightness(0.6); }
     }
     .countdown-label {
       font-size: 0.7rem; 
@@ -96,35 +121,52 @@
 <body>
   <div id="countdown" class="flex gap-3 sm:gap-5">
     <div class="countdown-unit">
-      <div class="flip-box"><span id="cd-days" class="countdown-value">--</span></div>
+      <div class="flip-card" id="card-days">
+        <span id="cd-days" class="countdown-value">--</span>
+      </div>
       <span class="countdown-label">Days</span>
     </div>
     <div class="countdown-unit">
-      <div class="flip-box"><span id="cd-hours" class="countdown-value">--</span></div>
+      <div class="flip-card" id="card-hours">
+        <span id="cd-hours" class="countdown-value">--</span>
+      </div>
       <span class="countdown-label">Hours</span>
     </div>
     <div class="countdown-unit">
-      <div class="flip-box"><span id="cd-mins" class="countdown-value">--</span></div>
+      <div class="flip-card" id="card-mins">
+        <span id="cd-mins" class="countdown-value">--</span>
+      </div>
       <span class="countdown-label">Min</span>
     </div>
     <div class="countdown-unit">
-      <div class="flip-box"><span id="cd-secs" class="countdown-value">--</span></div>
+      <div class="flip-card" id="card-secs">
+        <span id="cd-secs" class="countdown-value">--</span>
+      </div>
       <span class="countdown-label">Sec</span>
     </div>
   </div>
 
   <script>
     const target = new Date('2026-08-27T19:00:00').getTime();
-    let prevSecs = null;
 
     function updateValue(id, newValue) {
       const el = document.getElementById(id);
       if (el.textContent !== newValue) {
+        const card = el.closest('.flip-card');
+        const oldValue = el.textContent;
         el.textContent = newValue;
-        const parentBox = el.closest('.flip-box');
-        parentBox.classList.remove('flip-anim');
-        void parentBox.offsetWidth; // trigger reflow
-        parentBox.classList.add('flip-anim');
+
+        // Create temporary folding top flap for realistic split-flap motion
+        const flap = document.createElement('div');
+        flap.className = 'top-flap';
+        const span = document.createElement('span');
+        span.textContent = oldValue;
+        flap.appendChild(span);
+        card.appendChild(flap);
+
+        flap.offsetHeight; // Trigger layout reflow
+        flap.classList.add('fold-down');
+        setTimeout(() => flap.remove(), 400);
       }
     }
 
