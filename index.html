@@ -7,8 +7,15 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: transparent;
+      --card-bg: #1a1a1a;
+      --card-border: #8B0000;
+      --text-color: #ffffff;
+      --accent-color: #600000;
+    }
     html, body {
-      background: #111111 !important;
+      background: var(--bg-color) !important;
       margin: 0;
       padding: 0;
       width: 100%;
@@ -29,7 +36,7 @@
       gap: 10px;
     }
     .event-date {
-      color: #d4af37; /* Warm Gold accent matching the logo text */
+      color: var(--text-color);
       font-weight: 600;
       font-size: 0.8rem;
       text-transform: uppercase;
@@ -43,11 +50,10 @@
       align-items: center; 
       gap: 6px;
     }
-    /* Flip Card Styled with Brand Crimson & Dark Charcoal */
     .flip-card {
       position: relative;
-      background: #1a1a1a;
-      border: 2px solid #8B0000; /* Deep Crimson Accent */
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
       border-radius: 12px;
       width: 68px;
       height: 68px;
@@ -65,25 +71,25 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: rgba(139, 0, 0, 0.4);
+      background: var(--card-border);
+      opacity: 0.4;
       z-index: 10;
     }
     .countdown-value {
       font-size: 2rem; 
       font-weight: 700; 
       line-height: 1;
-      color: #ffffff; 
+      color: var(--text-color); 
       font-variant-numeric: tabular-nums;
       z-index: 1;
     }
-    /* Top flap folding down with darker crimson tone */
     .top-flap {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 50%;
-      background: #600000;
+      background: var(--accent-color);
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       overflow: hidden;
@@ -99,7 +105,7 @@
       top: 0;
       font-size: 2rem;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-color);
       line-height: 68px;
     }
     .fold-down {
