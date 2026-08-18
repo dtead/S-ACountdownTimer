@@ -16,29 +16,25 @@
     html, body {
       background: #C4813A !important;
       background-color: #C4813A !important;
-      margin: 0 !important;
-      padding: 0 !important;
+      margin: 0;
+      padding: 0;
       width: 100%;
-      height: 100px !important;
-      overflow: hidden !important;
+      height: 100%;
     }
-    body {
-      font-family: 'DM Sans', sans-serif;
+    body { 
+      font-family: 'DM Sans', sans-serif; 
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding-top: 2px !important;
-      padding-bottom: 2px !important;
+      overflow: hidden;
     }
     .countdown-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 12px;
       background: transparent !important;
-      margin: 0 !important;
-      padding: 0 !important;
     }
     .event-date {
       color: var(--card-border);
@@ -47,14 +43,12 @@
       text-transform: uppercase;
       letter-spacing: 0.12em;
       text-align: center;
-      margin: 0;
-      padding: 0;
     }
     .countdown-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 6px;
     }
     .flip-card {
       position: relative;
@@ -82,10 +76,10 @@
       z-index: 10;
     }
     .countdown-value {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2rem; 
+      font-weight: 700; 
       line-height: 1;
-      color: var(--text-color);
+      color: var(--text-color); 
       font-variant-numeric: tabular-nums;
       z-index: 1;
     }
@@ -122,13 +116,11 @@
       100% { transform: rotateX(-90deg); filter: brightness(0.5); }
     }
     .countdown-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
+      font-size: 0.65rem; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
       color: var(--card-border);
       font-weight: 700;
-      margin: 0;
-      padding: 0;
     }
   </style>
 </head>
@@ -168,28 +160,23 @@
 
     function updateValue(id, newValue) {
       const el = document.getElementById(id);
-      if (!el) return;
-      const oldValue = el.textContent;
-      
-      if (oldValue === '--') {
-        el.textContent = newValue;
-        return;
-      }
-
-      if (oldValue !== newValue) {
+      if (el.textContent !== newValue) {
         const card = el.closest('.flip-card');
+        const oldValue = el.textContent;
         el.textContent = newValue;
-        
-        const flap = document.createElement('div');
-        flap.className = 'top-flap';
-        const span = document.createElement('span');
-        span.textContent = oldValue;
-        flap.appendChild(span);
-        card.appendChild(flap);
-        
-        flap.offsetHeight; 
-        flap.classList.add('fold-down');
-        setTimeout(() => flap.remove(), 600);
+
+        if (oldValue !== '--') {
+          const flap = document.createElement('div');
+          flap.className = 'top-flap';
+          const span = document.createElement('span');
+          span.textContent = oldValue;
+          flap.appendChild(span);
+          card.appendChild(flap);
+
+          flap.offsetHeight; 
+          flap.classList.add('fold-down');
+          setTimeout(() => flap.remove(), 600);
+        }
       }
     }
 
